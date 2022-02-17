@@ -33,11 +33,11 @@ public class Machine {
 	}
 	
 	public int numberOfIntegers() {
-		return variables.size();//variables.size();
+		return variables.size();
 	}
 
 	public boolean hasInteger(String string) {
-		return variables.containsKey(string);//variables.contains(string);
+		return variables.containsKey(string);
 	}
 
 	public void SetVariable(String string, int value) {

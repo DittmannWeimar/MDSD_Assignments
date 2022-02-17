@@ -2,7 +2,7 @@ package main.metamodel;
 
 public class Transition {
 	
-	private String event; //TODO migth change back to object
+	private String event;
 	private State taget;
 	private boolean setOperation;
 	private boolean incrementOperation;
@@ -16,9 +16,6 @@ public class Transition {
 	private boolean isEqual;
 	private boolean isLess;
 	private boolean isGreater;
-//	private 
-	
-//	private Map<String, Integer> conditionalValues
 	
 	public Transition(String event, State state) {
 		this.event = event;
