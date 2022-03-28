@@ -116,7 +116,7 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
 
 
     // $ANTLR start "ruleMathExp"
-    // InternalMath.g:71:1: ruleMathExp returns [EObject current=null] : (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) ) ;
+    // InternalMath.g:71:1: ruleMathExp returns [EObject current=null] : (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) )? ;
     public final EObject ruleMathExp() throws RecognitionException {
         EObject current = null;
 
@@ -130,77 +130,88 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
         	enterRule();
 
         try {
-            // InternalMath.g:77:2: ( (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) ) )
-            // InternalMath.g:78:2: (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) )
+            // InternalMath.g:77:2: ( (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) )? )
+            // InternalMath.g:78:2: (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) )?
             {
-            // InternalMath.g:78:2: (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) )
-            // InternalMath.g:79:3: otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) )
-            {
-            otherlv_0=(Token)match(input,11,FOLLOW_3); 
+            // InternalMath.g:78:2: (otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) ) )?
+            int alt1=2;
+            int LA1_0 = input.LA(1);
 
-            			newLeafNode(otherlv_0, grammarAccess.getMathExpAccess().getVarKeyword_0());
-            		
-            // InternalMath.g:83:3: ( (lv_name_1_0= RULE_ID ) )
-            // InternalMath.g:84:4: (lv_name_1_0= RULE_ID )
-            {
-            // InternalMath.g:84:4: (lv_name_1_0= RULE_ID )
-            // InternalMath.g:85:5: lv_name_1_0= RULE_ID
-            {
-            lv_name_1_0=(Token)match(input,RULE_ID,FOLLOW_4); 
-
-            					newLeafNode(lv_name_1_0, grammarAccess.getMathExpAccess().getNameIDTerminalRuleCall_1_0());
-            				
-
-            					if (current==null) {
-            						current = createModelElement(grammarAccess.getMathExpRule());
-            					}
-            					setWithLastConsumed(
-            						current,
-            						"name",
-            						lv_name_1_0,
-            						"org.eclipse.xtext.common.Terminals.ID");
-            				
-
+            if ( (LA1_0==11) ) {
+                alt1=1;
             }
+            switch (alt1) {
+                case 1 :
+                    // InternalMath.g:79:3: otherlv_0= 'var' ( (lv_name_1_0= RULE_ID ) ) otherlv_2= '=' ( (lv_exp_3_0= ruleExp ) )
+                    {
+                    otherlv_0=(Token)match(input,11,FOLLOW_3); 
+
+                    			newLeafNode(otherlv_0, grammarAccess.getMathExpAccess().getVarKeyword_0());
+                    		
+                    // InternalMath.g:83:3: ( (lv_name_1_0= RULE_ID ) )
+                    // InternalMath.g:84:4: (lv_name_1_0= RULE_ID )
+                    {
+                    // InternalMath.g:84:4: (lv_name_1_0= RULE_ID )
+                    // InternalMath.g:85:5: lv_name_1_0= RULE_ID
+                    {
+                    lv_name_1_0=(Token)match(input,RULE_ID,FOLLOW_4); 
+
+                    					newLeafNode(lv_name_1_0, grammarAccess.getMathExpAccess().getNameIDTerminalRuleCall_1_0());
+                    				
+
+                    					if (current==null) {
+                    						current = createModelElement(grammarAccess.getMathExpRule());
+                    					}
+                    					setWithLastConsumed(
+                    						current,
+                    						"name",
+                    						lv_name_1_0,
+                    						"org.eclipse.xtext.common.Terminals.ID");
+                    				
+
+                    }
 
 
-            }
+                    }
 
-            otherlv_2=(Token)match(input,12,FOLLOW_5); 
+                    otherlv_2=(Token)match(input,12,FOLLOW_5); 
 
-            			newLeafNode(otherlv_2, grammarAccess.getMathExpAccess().getEqualsSignKeyword_2());
-            		
-            // InternalMath.g:105:3: ( (lv_exp_3_0= ruleExp ) )
-            // InternalMath.g:106:4: (lv_exp_3_0= ruleExp )
-            {
-            // InternalMath.g:106:4: (lv_exp_3_0= ruleExp )
-            // InternalMath.g:107:5: lv_exp_3_0= ruleExp
-            {
+                    			newLeafNode(otherlv_2, grammarAccess.getMathExpAccess().getEqualsSignKeyword_2());
+                    		
+                    // InternalMath.g:105:3: ( (lv_exp_3_0= ruleExp ) )
+                    // InternalMath.g:106:4: (lv_exp_3_0= ruleExp )
+                    {
+                    // InternalMath.g:106:4: (lv_exp_3_0= ruleExp )
+                    // InternalMath.g:107:5: lv_exp_3_0= ruleExp
+                    {
 
-            					newCompositeNode(grammarAccess.getMathExpAccess().getExpExpParserRuleCall_3_0());
-            				
-            pushFollow(FOLLOW_2);
-            lv_exp_3_0=ruleExp();
+                    					newCompositeNode(grammarAccess.getMathExpAccess().getExpExpParserRuleCall_3_0());
+                    				
+                    pushFollow(FOLLOW_2);
+                    lv_exp_3_0=ruleExp();
 
-            state._fsp--;
-
-
-            					if (current==null) {
-            						current = createModelElementForParent(grammarAccess.getMathExpRule());
-            					}
-            					set(
-            						current,
-            						"exp",
-            						lv_exp_3_0,
-            						"dk.sdu.mmmi.mdsd.Math.Exp");
-            					afterParserOrEnumRuleCall();
-            				
-
-            }
+                    state._fsp--;
 
 
-            }
+                    					if (current==null) {
+                    						current = createModelElementForParent(grammarAccess.getMathExpRule());
+                    					}
+                    					set(
+                    						current,
+                    						"exp",
+                    						lv_exp_3_0,
+                    						"dk.sdu.mmmi.mdsd.Math.Exp");
+                    					afterParserOrEnumRuleCall();
+                    				
 
+                    }
+
+
+                    }
+
+
+                    }
+                    break;
 
             }
 
@@ -313,13 +324,13 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             }
 
             // InternalMath.g:162:3: ( ( (lv_operator_1_0= ruleExpOp ) ) ( (lv_right_2_0= ruleExp ) ) )?
-            int alt1=2;
-            int LA1_0 = input.LA(1);
+            int alt2=2;
+            int LA2_0 = input.LA(1);
 
-            if ( ((LA1_0>=13 && LA1_0<=16)) ) {
-                alt1=1;
+            if ( ((LA2_0>=13 && LA2_0<=16)) ) {
+                alt2=1;
             }
-            switch (alt1) {
+            switch (alt2) {
                 case 1 :
                     // InternalMath.g:163:4: ( (lv_operator_1_0= ruleExpOp ) ) ( (lv_right_2_0= ruleExp ) )
                     {
@@ -467,36 +478,36 @@ public class InternalMathParser extends AbstractInternalAntlrParser {
             // InternalMath.g:220:2: ( ( () otherlv_1= '+' ) | ( () otherlv_3= '-' ) | ( () otherlv_5= '*' ) | ( () otherlv_7= '/' ) )
             {
             // InternalMath.g:220:2: ( ( () otherlv_1= '+' ) | ( () otherlv_3= '-' ) | ( () otherlv_5= '*' ) | ( () otherlv_7= '/' ) )
-            int alt2=4;
+            int alt3=4;
             switch ( input.LA(1) ) {
             case 13:
                 {
-                alt2=1;
+                alt3=1;
                 }
                 break;
             case 14:
                 {
-                alt2=2;
+                alt3=2;
                 }
                 break;
             case 15:
                 {
-                alt2=3;
+                alt3=3;
                 }
                 break;
             case 16:
                 {
-                alt2=4;
+                alt3=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 2, 0, input);
+                    new NoViableAltException("", 3, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt2) {
+            switch (alt3) {
                 case 1 :
                     // InternalMath.g:221:3: ( () otherlv_1= '+' )
                     {

@@ -121,7 +121,7 @@ ruleMathExp returns [EObject current=null]
 				}
 			)
 		)
-	)
+	)?
 ;
 
 // Entry rule entryRuleExp

@@ -17,6 +17,11 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
+import dk.sdu.mmmi.mdsd.math.Parenthesis
+import dk.sdu.mmmi.mdsd.math.VariableUse
+import dk.sdu.mmmi.mdsd.math.Number
+import java.util.List
+import java.util.ArrayList
 
 /**
  * Generates code from your model files on save.
@@ -40,8 +45,8 @@ class MathGenerator extends AbstractGenerator {
 	// Note: written according to illegal left-recursive grammar, requires fix
 	//
 	
-	def static compute(MathExp math) { 
-		math.exp.computeExp
+	def static compute(MathExp math) {
+		variables.put(math.name, math.exp.computeExp)
 		return variables
 	}
 	
@@ -50,14 +55,26 @@ class MathGenerator extends AbstractGenerator {
 		switch exp.operator {
 			Plus: left+exp.right.computeExp
 			Minus: left-exp.right.computeExp
-			Mult: left*exp.right.computeExp
+			Mult:  left*exp.right.computeExp
 			Div: left/exp.right.computeExp
 			default: left
 		}
 	}
 	
 	def static int computePrim(Primary factor) { 
-		87
+		switch factor{
+			Number: factor.value
+			Parenthesis: factor.exp.computeExp
+			VariableUse: factor.ref.computeVariableUse
+			default: 0
+		}
+	}
+	
+	def static int computeVariableUse(MathExp math){
+		if (!variables.containsKey(math.name)){
+			variables.put(math.name, math.exp.computeExp)
+		} 
+		return variables.get(math.name)
 	}
 
 	def void displayPanel(Map<String, Integer> result) {

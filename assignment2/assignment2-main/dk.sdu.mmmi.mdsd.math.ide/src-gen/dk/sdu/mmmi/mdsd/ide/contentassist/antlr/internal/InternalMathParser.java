@@ -107,27 +107,38 @@ public class InternalMathParser extends AbstractInternalContentAssistParser {
 
 
     // $ANTLR start "ruleMathExp"
-    // InternalMath.g:62:1: ruleMathExp : ( ( rule__MathExp__Group__0 ) ) ;
+    // InternalMath.g:62:1: ruleMathExp : ( ( rule__MathExp__Group__0 )? ) ;
     public final void ruleMathExp() throws RecognitionException {
 
         		int stackSize = keepStackSize();
         	
         try {
-            // InternalMath.g:66:2: ( ( ( rule__MathExp__Group__0 ) ) )
-            // InternalMath.g:67:2: ( ( rule__MathExp__Group__0 ) )
+            // InternalMath.g:66:2: ( ( ( rule__MathExp__Group__0 )? ) )
+            // InternalMath.g:67:2: ( ( rule__MathExp__Group__0 )? )
             {
-            // InternalMath.g:67:2: ( ( rule__MathExp__Group__0 ) )
-            // InternalMath.g:68:3: ( rule__MathExp__Group__0 )
+            // InternalMath.g:67:2: ( ( rule__MathExp__Group__0 )? )
+            // InternalMath.g:68:3: ( rule__MathExp__Group__0 )?
             {
              before(grammarAccess.getMathExpAccess().getGroup()); 
-            // InternalMath.g:69:3: ( rule__MathExp__Group__0 )
-            // InternalMath.g:69:4: rule__MathExp__Group__0
-            {
-            pushFollow(FOLLOW_2);
-            rule__MathExp__Group__0();
+            // InternalMath.g:69:3: ( rule__MathExp__Group__0 )?
+            int alt1=2;
+            int LA1_0 = input.LA(1);
 
-            state._fsp--;
+            if ( (LA1_0==11) ) {
+                alt1=1;
+            }
+            switch (alt1) {
+                case 1 :
+                    // InternalMath.g:69:4: rule__MathExp__Group__0
+                    {
+                    pushFollow(FOLLOW_2);
+                    rule__MathExp__Group__0();
 
+                    state._fsp--;
+
+
+                    }
+                    break;
 
             }
 
@@ -546,36 +557,36 @@ public class InternalMathParser extends AbstractInternalContentAssistParser {
         	
         try {
             // InternalMath.g:206:1: ( ( ( rule__ExpOp__Group_0__0 ) ) | ( ( rule__ExpOp__Group_1__0 ) ) | ( ( rule__ExpOp__Group_2__0 ) ) | ( ( rule__ExpOp__Group_3__0 ) ) )
-            int alt1=4;
+            int alt2=4;
             switch ( input.LA(1) ) {
             case 13:
                 {
-                alt1=1;
+                alt2=1;
                 }
                 break;
             case 14:
                 {
-                alt1=2;
+                alt2=2;
                 }
                 break;
             case 15:
                 {
-                alt1=3;
+                alt2=3;
                 }
                 break;
             case 16:
                 {
-                alt1=4;
+                alt2=4;
                 }
                 break;
             default:
                 NoViableAltException nvae =
-                    new NoViableAltException("", 1, 0, input);
+                    new NoViableAltException("", 2, 0, input);
 
                 throw nvae;
             }
 
-            switch (alt1) {
+            switch (alt2) {
                 case 1 :
                     // InternalMath.g:207:2: ( ( rule__ExpOp__Group_0__0 ) )
                     {
@@ -1141,13 +1152,13 @@ public class InternalMathParser extends AbstractInternalContentAssistParser {
             {
              before(grammarAccess.getExpAccess().getGroup_1()); 
             // InternalMath.g:388:2: ( rule__Exp__Group_1__0 )?
-            int alt2=2;
-            int LA2_0 = input.LA(1);
+            int alt3=2;
+            int LA3_0 = input.LA(1);
 
-            if ( ((LA2_0>=13 && LA2_0<=16)) ) {
-                alt2=1;
+            if ( ((LA3_0>=13 && LA3_0<=16)) ) {
+                alt3=1;
             }
-            switch (alt2) {
+            switch (alt3) {
                 case 1 :
                     // InternalMath.g:388:3: rule__Exp__Group_1__0
                     {

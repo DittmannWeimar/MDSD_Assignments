@@ -66,7 +66,7 @@ ruleMathExp
 	:
 	(
 		{ before(grammarAccess.getMathExpAccess().getGroup()); }
-		(rule__MathExp__Group__0)
+		(rule__MathExp__Group__0)?
 		{ after(grammarAccess.getMathExpAccess().getGroup()); }
 	)
 ;

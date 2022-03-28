@@ -10,8 +10,10 @@ import dk.sdu.mmmi.mdsd.math.ExpOp;
 import dk.sdu.mmmi.mdsd.math.MathExp;
 import dk.sdu.mmmi.mdsd.math.Minus;
 import dk.sdu.mmmi.mdsd.math.Mult;
+import dk.sdu.mmmi.mdsd.math.Parenthesis;
 import dk.sdu.mmmi.mdsd.math.Plus;
 import dk.sdu.mmmi.mdsd.math.Primary;
+import dk.sdu.mmmi.mdsd.math.VariableUse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -38,7 +40,7 @@ public class MathGenerator extends AbstractGenerator {
   }
   
   public static Map<String, Integer> compute(final MathExp math) {
-    MathGenerator.computeExp(math.getExp());
+    MathGenerator.variables.put(math.getName(), Integer.valueOf(MathGenerator.computeExp(math.getExp())));
     return MathGenerator.variables;
   }
   
@@ -84,7 +86,37 @@ public class MathGenerator extends AbstractGenerator {
   }
   
   public static int computePrim(final Primary factor) {
-    return 87;
+    int _switchResult = (int) 0;
+    boolean _matched = false;
+    if (factor instanceof dk.sdu.mmmi.mdsd.math.Number) {
+      _matched=true;
+      _switchResult = ((dk.sdu.mmmi.mdsd.math.Number)factor).getValue();
+    }
+    if (!_matched) {
+      if (factor instanceof Parenthesis) {
+        _matched=true;
+        _switchResult = MathGenerator.computeExp(((Parenthesis)factor).getExp());
+      }
+    }
+    if (!_matched) {
+      if (factor instanceof VariableUse) {
+        _matched=true;
+        _switchResult = MathGenerator.computeVariableUse(((VariableUse)factor).getRef());
+      }
+    }
+    if (!_matched) {
+      _switchResult = 0;
+    }
+    return _switchResult;
+  }
+  
+  public static int computeVariableUse(final MathExp math) {
+    boolean _containsKey = MathGenerator.variables.containsKey(math.getName());
+    boolean _not = (!_containsKey);
+    if (_not) {
+      MathGenerator.variables.put(math.getName(), Integer.valueOf(MathGenerator.computeExp(math.getExp())));
+    }
+    return (MathGenerator.variables.get(math.getName())).intValue();
   }
   
   public void displayPanel(final Map<String, Integer> result) {

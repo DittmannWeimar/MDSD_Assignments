@@ -35,11 +35,11 @@ public class MathGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 		private final RuleCall cExpExpParserRuleCall_3_0 = (RuleCall)cExpAssignment_3.eContents().get(0);
 		
 		//MathExp:
-		//    'var' name=ID '=' exp=Exp
+		//    ('var' name=ID '=' exp=Exp)?
 		//;
 		@Override public ParserRule getRule() { return rule; }
 		
-		//'var' name=ID '=' exp=Exp
+		//('var' name=ID '=' exp=Exp)?
 		public Group getGroup() { return cGroup; }
 		
 		//'var'
@@ -306,7 +306,7 @@ public class MathGrammarAccess extends AbstractElementFinder.AbstractGrammarElem
 
 	
 	//MathExp:
-	//    'var' name=ID '=' exp=Exp
+	//    ('var' name=ID '=' exp=Exp)?
 	//;
 	public MathExpElements getMathExpAccess() {
 		return pMathExp;
