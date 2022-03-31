@@ -3,7 +3,6 @@
  */
 package dk.sdu.mmmi.mdsd.math.impl;
 
-import dk.sdu.mmmi.mdsd.math.MathExp;
 import dk.sdu.mmmi.mdsd.math.MathPackage;
 import dk.sdu.mmmi.mdsd.math.VariableUse;
 
@@ -37,7 +36,7 @@ public class VariableUseImpl extends PrimaryImpl implements VariableUse
    * @generated
    * @ordered
    */
-  protected MathExp ref;
+  protected dk.sdu.mmmi.mdsd.math.Math ref;
 
   /**
    * <!-- begin-user-doc -->
@@ -66,12 +65,12 @@ public class VariableUseImpl extends PrimaryImpl implements VariableUse
    * @generated
    */
   @Override
-  public MathExp getRef()
+  public dk.sdu.mmmi.mdsd.math.Math getRef()
   {
     if (ref != null && ref.eIsProxy())
     {
       InternalEObject oldRef = (InternalEObject)ref;
-      ref = (MathExp)eResolveProxy(oldRef);
+      ref = (dk.sdu.mmmi.mdsd.math.Math)eResolveProxy(oldRef);
       if (ref != oldRef)
       {
         if (eNotificationRequired())
@@ -86,7 +85,7 @@ public class VariableUseImpl extends PrimaryImpl implements VariableUse
    * <!-- end-user-doc -->
    * @generated
    */
-  public MathExp basicGetRef()
+  public dk.sdu.mmmi.mdsd.math.Math basicGetRef()
   {
     return ref;
   }
@@ -97,9 +96,9 @@ public class VariableUseImpl extends PrimaryImpl implements VariableUse
    * @generated
    */
   @Override
-  public void setRef(MathExp newRef)
+  public void setRef(dk.sdu.mmmi.mdsd.math.Math newRef)
   {
-    MathExp oldRef = ref;
+    dk.sdu.mmmi.mdsd.math.Math oldRef = ref;
     ref = newRef;
     if (eNotificationRequired())
       eNotify(new ENotificationImpl(this, Notification.SET, MathPackage.VARIABLE_USE__REF, oldRef, ref));
@@ -133,7 +132,7 @@ public class VariableUseImpl extends PrimaryImpl implements VariableUse
     switch (featureID)
     {
       case MathPackage.VARIABLE_USE__REF:
-        setRef((MathExp)newValue);
+        setRef((dk.sdu.mmmi.mdsd.math.Math)newValue);
         return;
     }
     super.eSet(featureID, newValue);
@@ -150,7 +149,7 @@ public class VariableUseImpl extends PrimaryImpl implements VariableUse
     switch (featureID)
     {
       case MathPackage.VARIABLE_USE__REF:
-        setRef((MathExp)null);
+        setRef((dk.sdu.mmmi.mdsd.math.Math)null);
         return;
     }
     super.eUnset(featureID);

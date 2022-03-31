@@ -6,13 +6,11 @@ package dk.sdu.mmmi.mdsd.generator;
 import com.google.common.collect.Iterators;
 import dk.sdu.mmmi.mdsd.math.Div;
 import dk.sdu.mmmi.mdsd.math.Exp;
-import dk.sdu.mmmi.mdsd.math.ExpOp;
 import dk.sdu.mmmi.mdsd.math.MathExp;
 import dk.sdu.mmmi.mdsd.math.Minus;
-import dk.sdu.mmmi.mdsd.math.Mult;
+import dk.sdu.mmmi.mdsd.math.Multi;
 import dk.sdu.mmmi.mdsd.math.Parenthesis;
 import dk.sdu.mmmi.mdsd.math.Plus;
-import dk.sdu.mmmi.mdsd.math.Primary;
 import dk.sdu.mmmi.mdsd.math.VariableUse;
 import java.util.HashMap;
 import java.util.Map;
@@ -22,6 +20,7 @@ import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtext.generator.AbstractGenerator;
 import org.eclipse.xtext.generator.IFileSystemAccess2;
 import org.eclipse.xtext.generator.IGeneratorContext;
+import org.eclipse.xtext.xbase.lib.Conversions;
 
 /**
  * Generates code from your model files on save.
@@ -40,83 +39,67 @@ public class MathGenerator extends AbstractGenerator {
   }
   
   public static Map<String, Integer> compute(final MathExp math) {
-    MathGenerator.variables.put(math.getName(), Integer.valueOf(MathGenerator.computeExp(math.getExp())));
+    for (int i = 0; (i < ((Object[])Conversions.unwrapArray(math.getExps(), Object.class)).length); i++) {
+      MathGenerator.variables.put(math.getExps().get(i).getName(), Integer.valueOf(MathGenerator.computeExp(math.getExps().get(i).getExp())));
+    }
     return MathGenerator.variables;
   }
   
   public static int computeExp(final Exp exp) {
-    int _xblockexpression = (int) 0;
-    {
-      final int left = MathGenerator.computePrim(exp.getLeft());
-      int _switchResult = (int) 0;
-      ExpOp _operator = exp.getOperator();
-      boolean _matched = false;
-      if (_operator instanceof Plus) {
-        _matched=true;
-        int _computeExp = MathGenerator.computeExp(exp.getRight());
-        _switchResult = (left + _computeExp);
-      }
-      if (!_matched) {
-        if (_operator instanceof Minus) {
-          _matched=true;
-          int _computeExp = MathGenerator.computeExp(exp.getRight());
-          _switchResult = (left - _computeExp);
-        }
-      }
-      if (!_matched) {
-        if (_operator instanceof Mult) {
-          _matched=true;
-          int _computeExp = MathGenerator.computeExp(exp.getRight());
-          _switchResult = (left * _computeExp);
-        }
-      }
-      if (!_matched) {
-        if (_operator instanceof Div) {
-          _matched=true;
-          int _computeExp = MathGenerator.computeExp(exp.getRight());
-          _switchResult = (left / _computeExp);
-        }
-      }
-      if (!_matched) {
-        _switchResult = left;
-      }
-      _xblockexpression = _switchResult;
-    }
-    return _xblockexpression;
-  }
-  
-  public static int computePrim(final Primary factor) {
-    int _switchResult = (int) 0;
+    Integer _switchResult = null;
     boolean _matched = false;
-    if (factor instanceof dk.sdu.mmmi.mdsd.math.Number) {
+    if (exp instanceof Plus) {
       _matched=true;
-      _switchResult = ((dk.sdu.mmmi.mdsd.math.Number)factor).getValue();
+      int _computeExp = MathGenerator.computeExp(((Plus)exp).getLeft());
+      int _computeExp_1 = MathGenerator.computeExp(((Plus)exp).getRight());
+      _switchResult = Integer.valueOf((_computeExp + _computeExp_1));
     }
     if (!_matched) {
-      if (factor instanceof Parenthesis) {
+      if (exp instanceof Minus) {
         _matched=true;
-        _switchResult = MathGenerator.computeExp(((Parenthesis)factor).getExp());
+        int _computeExp = MathGenerator.computeExp(((Minus)exp).getLeft());
+        int _computeExp_1 = MathGenerator.computeExp(((Minus)exp).getRight());
+        _switchResult = Integer.valueOf((_computeExp - _computeExp_1));
       }
     }
     if (!_matched) {
-      if (factor instanceof VariableUse) {
+      if (exp instanceof Multi) {
         _matched=true;
-        _switchResult = MathGenerator.computeVariableUse(((VariableUse)factor).getRef());
+        int _computeExp = MathGenerator.computeExp(((Multi)exp).getLeft());
+        int _computeExp_1 = MathGenerator.computeExp(((Multi)exp).getRight());
+        _switchResult = Integer.valueOf((_computeExp * _computeExp_1));
       }
     }
     if (!_matched) {
-      _switchResult = 0;
+      if (exp instanceof Div) {
+        _matched=true;
+        int _computeExp = MathGenerator.computeExp(((Div)exp).getLeft());
+        int _computeExp_1 = MathGenerator.computeExp(((Div)exp).getRight());
+        _switchResult = Integer.valueOf((_computeExp / _computeExp_1));
+      }
     }
-    return _switchResult;
-  }
-  
-  public static int computeVariableUse(final MathExp math) {
-    boolean _containsKey = MathGenerator.variables.containsKey(math.getName());
-    boolean _not = (!_containsKey);
-    if (_not) {
-      MathGenerator.variables.put(math.getName(), Integer.valueOf(MathGenerator.computeExp(math.getExp())));
+    if (!_matched) {
+      if (exp instanceof dk.sdu.mmmi.mdsd.math.Number) {
+        _matched=true;
+        _switchResult = Integer.valueOf(((dk.sdu.mmmi.mdsd.math.Number)exp).getValue());
+      }
     }
-    return (MathGenerator.variables.get(math.getName())).intValue();
+    if (!_matched) {
+      if (exp instanceof Parenthesis) {
+        _matched=true;
+        _switchResult = Integer.valueOf(MathGenerator.computeExp(((Parenthesis)exp).getExp()));
+      }
+    }
+    if (!_matched) {
+      if (exp instanceof VariableUse) {
+        _matched=true;
+        _switchResult = MathGenerator.variables.get(((VariableUse)exp).getRef().getName());
+      }
+    }
+    if (!_matched) {
+      _switchResult = Integer.valueOf(0);
+    }
+    return (_switchResult).intValue();
   }
   
   public void displayPanel(final Map<String, Integer> result) {

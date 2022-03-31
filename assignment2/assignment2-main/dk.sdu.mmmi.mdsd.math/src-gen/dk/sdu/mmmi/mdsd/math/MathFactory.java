@@ -33,6 +33,15 @@ public interface MathFactory extends EFactory
   MathExp createMathExp();
 
   /**
+   * Returns a new object of class '<em>Math</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Math</em>'.
+   * @generated
+   */
+  Math createMath();
+
+  /**
    * Returns a new object of class '<em>Exp</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -40,15 +49,6 @@ public interface MathFactory extends EFactory
    * @generated
    */
   Exp createExp();
-
-  /**
-   * Returns a new object of class '<em>Exp Op</em>'.
-   * <!-- begin-user-doc -->
-   * <!-- end-user-doc -->
-   * @return a new object of class '<em>Exp Op</em>'.
-   * @generated
-   */
-  ExpOp createExpOp();
 
   /**
    * Returns a new object of class '<em>Primary</em>'.
@@ -87,6 +87,15 @@ public interface MathFactory extends EFactory
   VariableUse createVariableUse();
 
   /**
+   * Returns a new object of class '<em>Let</em>'.
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @return a new object of class '<em>Let</em>'.
+   * @generated
+   */
+  Let createLet();
+
+  /**
    * Returns a new object of class '<em>Plus</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
@@ -105,13 +114,13 @@ public interface MathFactory extends EFactory
   Minus createMinus();
 
   /**
-   * Returns a new object of class '<em>Mult</em>'.
+   * Returns a new object of class '<em>Multi</em>'.
    * <!-- begin-user-doc -->
    * <!-- end-user-doc -->
-   * @return a new object of class '<em>Mult</em>'.
+   * @return a new object of class '<em>Multi</em>'.
    * @generated
    */
-  Mult createMult();
+  Multi createMulti();
 
   /**
    * Returns a new object of class '<em>Div</em>'.

@@ -8,8 +8,6 @@ import dk.sdu.mmmi.mdsd.math.Primary;
 
 import org.eclipse.emf.ecore.EClass;
 
-import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
-
 /**
  * <!-- begin-user-doc -->
  * An implementation of the model object '<em><b>Primary</b></em>'.
@@ -17,7 +15,7 @@ import org.eclipse.emf.ecore.impl.MinimalEObjectImpl;
  *
  * @generated
  */
-public class PrimaryImpl extends MinimalEObjectImpl.Container implements Primary
+public class PrimaryImpl extends ExpImpl implements Primary
 {
   /**
    * <!-- begin-user-doc -->

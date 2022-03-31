@@ -7,9 +7,12 @@ import dk.sdu.mmmi.mdsd.math.Div
 import dk.sdu.mmmi.mdsd.math.Exp
 import dk.sdu.mmmi.mdsd.math.MathExp
 import dk.sdu.mmmi.mdsd.math.Minus
-import dk.sdu.mmmi.mdsd.math.Mult
+import dk.sdu.mmmi.mdsd.math.Multi
+import dk.sdu.mmmi.mdsd.math.Number
+import dk.sdu.mmmi.mdsd.math.Parenthesis
 import dk.sdu.mmmi.mdsd.math.Plus
-import dk.sdu.mmmi.mdsd.math.Primary
+import dk.sdu.mmmi.mdsd.math.VariableUse
+import dk.sdu.mmmi.mdsd.math.Let
 import java.util.HashMap
 import java.util.Map
 import javax.swing.JOptionPane
@@ -17,11 +20,6 @@ import org.eclipse.emf.ecore.resource.Resource
 import org.eclipse.xtext.generator.AbstractGenerator
 import org.eclipse.xtext.generator.IFileSystemAccess2
 import org.eclipse.xtext.generator.IGeneratorContext
-import dk.sdu.mmmi.mdsd.math.Parenthesis
-import dk.sdu.mmmi.mdsd.math.VariableUse
-import dk.sdu.mmmi.mdsd.math.Number
-import java.util.List
-import java.util.ArrayList
 
 /**
  * Generates code from your model files on save.
@@ -46,35 +44,24 @@ class MathGenerator extends AbstractGenerator {
 	//
 	
 	def static compute(MathExp math) {
-		variables.put(math.name, math.exp.computeExp)
+		for (var i = 0; i < math.exps.length; i++){
+			variables.put(math.exps.get(i).name, math.exps.get(i).exp.computeExp)
+		}
 		return variables
 	}
 	
 	def static int computeExp(Exp exp) {
-		val left = exp.left.computePrim
-		switch exp.operator {
-			Plus: left+exp.right.computeExp
-			Minus: left-exp.right.computeExp
-			Mult:  left*exp.right.computeExp
-			Div: left/exp.right.computeExp
-			default: left
-		}
-	}
-	
-	def static int computePrim(Primary factor) { 
-		switch factor{
-			Number: factor.value
-			Parenthesis: factor.exp.computeExp
-			VariableUse: factor.ref.computeVariableUse
+		switch exp {
+			Plus: exp.left.computeExp + exp.right.computeExp
+			Minus: exp.left.computeExp - exp.right.computeExp
+			Multi:  exp.left.computeExp * exp.right.computeExp
+			Div: exp.left.computeExp / exp.right.computeExp
+			Number: exp.value
+			Parenthesis: exp.exp.computeExp
+			VariableUse: variables.get(exp.ref.name)
+			//Let: 
 			default: 0
 		}
-	}
-	
-	def static int computeVariableUse(MathExp math){
-		if (!variables.containsKey(math.name)){
-			variables.put(math.name, math.exp.computeExp)
-		} 
-		return variables.get(math.name)
 	}
 
 	def void displayPanel(Map<String, Integer> result) {
