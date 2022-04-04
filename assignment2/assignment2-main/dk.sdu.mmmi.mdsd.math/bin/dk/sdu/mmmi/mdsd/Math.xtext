@@ -24,7 +24,7 @@ MultiDiv returns Exp:
 ;
 
 Primary:
-	Number | Parenthesis | VariableUse | Let
+	Number | Parenthesis | VariableUse 
 ;
 
 Parenthesis:
@@ -37,9 +37,5 @@ Number:
 
 VariableUse:
 	ref = [Math]
-;
-
-Let:
-	'let' let=Math 'in' in=Exp 'end'
 ;
 
