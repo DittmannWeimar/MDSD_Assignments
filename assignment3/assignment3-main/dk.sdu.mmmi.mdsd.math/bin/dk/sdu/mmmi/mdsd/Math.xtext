@@ -2,6 +2,20 @@ grammar dk.sdu.mmmi.mdsd.Math with org.eclipse.xtext.common.Terminals
 
 generate math "http://www.sdu.dk/mmmi/mdsd/Math"
 
+Program:
+	'program' name=ID
+	('external' external+=External)*
+	math=MathExp
+;
+
+External:
+	name=ID '(' (type+=ID (',' type+=ID)*)? ')'
+;
+
+ExternalCall:
+	external=[External] '(' ((parms+=Exp) (',' parms+=Exp)*)? ')'
+;
+
 MathExp:
 	variables += VarBinding*
 ;
@@ -19,7 +33,11 @@ Factor returns Expression:
 ;
 
 Primary returns Expression:
-	{MathNumber} value=INT  | '(' Exp ')'  |  VariableUse | LetBinding
+	{MathNumber} value=INT  
+	| {Parenthesis} '(' exp=Exp ')'  
+	|  VariableUse 
+	| LetBinding
+	| ExternalCall
 ;
 
 LetBinding:

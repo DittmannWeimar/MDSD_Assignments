@@ -65,6 +65,9 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     switch (eClass.getClassifierID())
     {
+      case MathPackage.PROGRAM: return createProgram();
+      case MathPackage.EXTERNAL: return createExternal();
+      case MathPackage.EXTERNAL_CALL: return createExternalCall();
       case MathPackage.MATH_EXP: return createMathExp();
       case MathPackage.VAR_BINDING: return createVarBinding();
       case MathPackage.EXPRESSION: return createExpression();
@@ -76,9 +79,46 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
       case MathPackage.MULT: return createMult();
       case MathPackage.DIV: return createDiv();
       case MathPackage.MATH_NUMBER: return createMathNumber();
+      case MathPackage.PARENTHESIS: return createParenthesis();
       default:
         throw new IllegalArgumentException("The class '" + eClass.getName() + "' is not a valid classifier");
     }
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Program createProgram()
+  {
+    ProgramImpl program = new ProgramImpl();
+    return program;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public External createExternal()
+  {
+    ExternalImpl external = new ExternalImpl();
+    return external;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public ExternalCall createExternalCall()
+  {
+    ExternalCallImpl externalCall = new ExternalCallImpl();
+    return externalCall;
   }
 
   /**
@@ -211,6 +251,18 @@ public class MathFactoryImpl extends EFactoryImpl implements MathFactory
   {
     MathNumberImpl mathNumber = new MathNumberImpl();
     return mathNumber;
+  }
+
+  /**
+   * <!-- begin-user-doc -->
+   * <!-- end-user-doc -->
+   * @generated
+   */
+  @Override
+  public Parenthesis createParenthesis()
+  {
+    ParenthesisImpl parenthesis = new ParenthesisImpl();
+    return parenthesis;
   }
 
   /**
