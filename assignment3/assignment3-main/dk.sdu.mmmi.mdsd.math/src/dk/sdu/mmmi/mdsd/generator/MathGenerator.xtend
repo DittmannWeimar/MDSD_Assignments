@@ -31,9 +31,10 @@ class MathGenerator extends AbstractGenerator {
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val math = resource.allContents.filter(MathExp).next
-		val result = math.compute
-		result.displayPanel
-		
+		//val result = math.compute
+		//result.displayPanel
+		//«»
+		fsa.generateFile('''fuck_xtext.java''', math.toString())
 	}
 		
 	def void displayPanel(Map<String, Integer> result) {
