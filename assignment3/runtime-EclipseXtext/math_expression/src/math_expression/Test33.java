@@ -8,9 +8,11 @@ package math_expression;
 
 		public void compute(){
 			a = 40;
-			b = ;
+			int i = 2; 
+			b = a * i;
 			c = b * 3;
-			d = ;
+			i = 4; 
+			d = c + i;
 		}
 
 	}

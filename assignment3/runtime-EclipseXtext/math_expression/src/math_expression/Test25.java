@@ -6,7 +6,8 @@ package math_expression;
 
 		public void compute(){
 			x = 20;
-			y = ;
+			int a = 21; 
+			y = a * 2;
 		}
 
 	}

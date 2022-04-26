@@ -3,21 +3,23 @@
  */
 package dk.sdu.mmmi.mdsd.generator
 
+import dk.sdu.mmmi.mdsd.math.Binding
 import dk.sdu.mmmi.mdsd.math.Div
+import dk.sdu.mmmi.mdsd.math.Expression
+import dk.sdu.mmmi.mdsd.math.External
+import dk.sdu.mmmi.mdsd.math.ExternalCall
 import dk.sdu.mmmi.mdsd.math.LetBinding
-import dk.sdu.mmmi.mdsd.math.MathExp
 import dk.sdu.mmmi.mdsd.math.MathNumber
 import dk.sdu.mmmi.mdsd.math.Minus
 import dk.sdu.mmmi.mdsd.math.Mult
+import dk.sdu.mmmi.mdsd.math.Parenthesis
 import dk.sdu.mmmi.mdsd.math.Plus
+import dk.sdu.mmmi.mdsd.math.Program
 import dk.sdu.mmmi.mdsd.math.VarBinding
 import dk.sdu.mmmi.mdsd.math.VariableUse
-import dk.sdu.mmmi.mdsd.math.Program
-import dk.sdu.mmmi.mdsd.math.Expression
-import dk.sdu.mmmi.mdsd.math.Parenthesis
-import dk.sdu.mmmi.mdsd.math.*
-import java.util.*
+import java.util.ArrayList
 import java.util.HashMap
+import java.util.List
 import java.util.Map
 import javax.swing.JOptionPane
 import org.eclipse.emf.ecore.resource.Resource
@@ -32,10 +34,11 @@ import org.eclipse.xtext.generator.IGeneratorContext
  */
 class MathGenerator extends AbstractGenerator {
 	
-	//static Map<String, Integer> variables;
-	static int letterIndex = 0;
+	static Map<String, String> variables
+	static int letterIndex = 0
 	static String alphabet = "abcdefghijklmnopqrstuvwxyz"
-	
+	static Map<String, String> letVariables
+	static List<String> varLetters
 
 	override void doGenerate(Resource resource, IFileSystemAccess2 fsa, IGeneratorContext context) {
 		val program = resource.allContents.filter(Program).next
@@ -43,17 +46,15 @@ class MathGenerator extends AbstractGenerator {
 		//«»
 		fsa.generateFile('''math_expression/«programName».java''', program.compile)
 	}
-		
-	def void displayPanel(Map<String, Integer> result) {
-		var resultString = ""
-		for (entry : result.entrySet()) {
-         	resultString += "var " + entry.getKey() + " = " + entry.getValue() + "\n"
-        }
-		
-		JOptionPane.showMessageDialog(null, resultString ,"Math Language", JOptionPane.INFORMATION_MESSAGE)
-	}
-	
-	def static compile(Program pro){ 
+
+	def static compile(Program pro){
+		variables = new HashMap()
+		letVariables = new HashMap()
+		varLetters = new ArrayList()
+		for(binding : pro.math.variables){
+			varLetters.add(binding.name)
+			variables.put(binding.name, binding.expression.compileExp)
+		}
 	return 
 	'''
 	package math_expression;
@@ -73,7 +74,8 @@ class MathGenerator extends AbstractGenerator {
 			«ENDIF»
 			public void compute(){
 				«FOR binding : pro.math.variables»
-					«binding.name» = «binding.expression.compileExp»;
+					«letVariables.get(binding.name)»
+					«binding.name» = «variables.get(binding.name)»;
 				«ENDFOR»
 			}
 	
@@ -97,18 +99,70 @@ class MathGenerator extends AbstractGenerator {
 			Parenthesis: '''(«exp.exp.compileExp»)'''
 			VariableUse: '''«exp.ref.name»'''
 			ExternalCall: '''this.external.«exp.external.name»(«String.join(", ", exp.parms.complieExpList)»)'''
-			LetBinding: '''«exp.compileLetBinding»'''
+			LetBinding: '''«exp.compileLet»'''
 			default: '''0'''
 		}
-		
+	
 	}
 	
-	def static String compileLetBinding(LetBinding exp){
+	def static String compileLet(LetBinding let){
 		
+		var bindingName = let.findBindingName
+		var letName = let.name
+		var newVariable = "int " + letName + " = " + let.binding.compileExp + "; "
+		var body = let.body.compileExp.toString()
+		
+		if(letVariables.containsKey(bindingName)){
+			var variable = letVariables.get(bindingName)
+			
+			if (varLetters.contains(let.name.toString())){
+				variable = variable.replace("int ", "")
+			}
+			letVariables.put(bindingName , newVariable + " " + variable + " ")
+		}
+		if(!letVariables.containsKey(bindingName)){
+			if(variables.containsKey(letName)){
+				letName = findNewName()
+				newVariable = "int " + letName + " = " + let.binding.compileExp + "; "
+				body = body.replace(let.name, letName)
+			} else if (varLetters.contains(letName)){
+				newVariable = newVariable.replace("int ", "")
+			}
+			
+			letVariables.put(bindingName , newVariable)
+			varLetters.add(letName)
+		}
+		
+		return body
+	}
+	
+	def static findNewName(){
+		var alpha = alphabet.toCharArray()
+		var let = "a"
+		for(letter : alpha){
+			if(!variables.containsKey(letter.toString())){
+				return let
+			}	
+			let = letter.toString()
+		}
+	}
+	
+	def static findBindingName(Binding binding) {
+		var name = binding.name;
+		var CurrentContainer = binding.eContainer;
+		
+		while (CurrentContainer !== null) {
+			if (CurrentContainer instanceof VarBinding) {
+				name = CurrentContainer.name;
+			}
+			CurrentContainer = CurrentContainer.eContainer;
+		}
+		
+		return name;
 	}
 	
 	def static List<String> complieExpList(List<Expression> expList){
-		var values = new ArrayList<String>();
+		var values = new ArrayList<String>()
 		for (exp : expList){
 			values.add(exp.compileExp)
 		}
@@ -125,6 +179,15 @@ class MathGenerator extends AbstractGenerator {
 			letterIndex = 0
 		}
 		return parms;
+	}
+
+	def void displayPanel(Map<String, Integer> result) {
+		var resultString = ""
+		for (entry : result.entrySet()) {
+         	resultString += "var " + entry.getKey() + " = " + entry.getValue() + "\n"
+        }
+		
+		JOptionPane.showMessageDialog(null, resultString ,"Math Language", JOptionPane.INFORMATION_MESSAGE)
 	}
 
 }

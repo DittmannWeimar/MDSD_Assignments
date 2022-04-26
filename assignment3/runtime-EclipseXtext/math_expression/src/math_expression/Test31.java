@@ -12,7 +12,8 @@ package math_expression;
 		
 		public void compute(){
 			x = 5;
-			y = 2 + this.external.pow(, 3 * 2);
+			int i = x; 
+			y = 2 + this.external.pow(i - 3, 3 * 2);
 		}
 
 		public interface External {

@@ -4,7 +4,8 @@ package math_expression;
 		public int x;
 
 		public void compute(){
-			x =  + 76;
+			int y = 2;  y = 3;  
+			x = y * y + y + 76;
 		}
 
 	}

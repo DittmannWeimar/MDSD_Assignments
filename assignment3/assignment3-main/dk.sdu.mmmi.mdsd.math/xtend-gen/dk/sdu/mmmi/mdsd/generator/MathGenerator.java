@@ -4,6 +4,7 @@
 package dk.sdu.mmmi.mdsd.generator;
 
 import com.google.common.collect.Iterators;
+import dk.sdu.mmmi.mdsd.math.Binding;
 import dk.sdu.mmmi.mdsd.math.Div;
 import dk.sdu.mmmi.mdsd.math.Expression;
 import dk.sdu.mmmi.mdsd.math.External;
@@ -18,11 +19,13 @@ import dk.sdu.mmmi.mdsd.math.Program;
 import dk.sdu.mmmi.mdsd.math.VarBinding;
 import dk.sdu.mmmi.mdsd.math.VariableUse;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import javax.swing.JOptionPane;
 import org.eclipse.emf.common.util.EList;
+import org.eclipse.emf.ecore.EObject;
 import org.eclipse.emf.ecore.resource.Resource;
 import org.eclipse.xtend2.lib.StringConcatenation;
 import org.eclipse.xtext.generator.AbstractGenerator;
@@ -36,9 +39,15 @@ import org.eclipse.xtext.generator.IGeneratorContext;
  */
 @SuppressWarnings("all")
 public class MathGenerator extends AbstractGenerator {
+  private static Map<String, String> variables;
+  
   private static int letterIndex = 0;
   
   private static String alphabet = "abcdefghijklmnopqrstuvwxyz";
+  
+  private static Map<String, String> letVariables;
+  
+  private static List<String> varLetters;
   
   @Override
   public void doGenerate(final Resource resource, final IFileSystemAccess2 fsa, final IGeneratorContext context) {
@@ -51,23 +60,20 @@ public class MathGenerator extends AbstractGenerator {
     fsa.generateFile(_builder.toString(), MathGenerator.compile(program));
   }
   
-  public void displayPanel(final Map<String, Integer> result) {
-    String resultString = "";
-    Set<Map.Entry<String, Integer>> _entrySet = result.entrySet();
-    for (final Map.Entry<String, Integer> entry : _entrySet) {
-      String _resultString = resultString;
-      String _key = entry.getKey();
-      String _plus = ("var " + _key);
-      String _plus_1 = (_plus + " = ");
-      Integer _value = entry.getValue();
-      String _plus_2 = (_plus_1 + _value);
-      String _plus_3 = (_plus_2 + "\n");
-      resultString = (_resultString + _plus_3);
-    }
-    JOptionPane.showMessageDialog(null, resultString, "Math Language", JOptionPane.INFORMATION_MESSAGE);
-  }
-  
   public static String compile(final Program pro) {
+    HashMap<String, String> _hashMap = new HashMap<String, String>();
+    MathGenerator.variables = _hashMap;
+    HashMap<String, String> _hashMap_1 = new HashMap<String, String>();
+    MathGenerator.letVariables = _hashMap_1;
+    ArrayList<String> _arrayList = new ArrayList<String>();
+    MathGenerator.varLetters = _arrayList;
+    EList<VarBinding> _variables = pro.getMath().getVariables();
+    for (final VarBinding binding : _variables) {
+      {
+        MathGenerator.varLetters.add(binding.getName());
+        MathGenerator.variables.put(binding.getName(), MathGenerator.compileExp(binding.getExpression()));
+      }
+    }
     StringConcatenation _builder = new StringConcatenation();
     _builder.append("package math_expression;");
     _builder.newLine();
@@ -80,11 +86,11 @@ public class MathGenerator extends AbstractGenerator {
     _builder.append("\t\t");
     _builder.newLine();
     {
-      EList<VarBinding> _variables = pro.getMath().getVariables();
-      for(final VarBinding binding : _variables) {
+      EList<VarBinding> _variables_1 = pro.getMath().getVariables();
+      for(final VarBinding binding_1 : _variables_1) {
         _builder.append("\t\t");
         _builder.append("public int ");
-        String _name_1 = binding.getName();
+        String _name_1 = binding_1.getName();
         _builder.append(_name_1, "\t\t");
         _builder.append(";");
         _builder.newLineIfNotEmpty();
@@ -121,14 +127,18 @@ public class MathGenerator extends AbstractGenerator {
     _builder.append("public void compute(){");
     _builder.newLine();
     {
-      EList<VarBinding> _variables_1 = pro.getMath().getVariables();
-      for(final VarBinding binding_1 : _variables_1) {
+      EList<VarBinding> _variables_2 = pro.getMath().getVariables();
+      for(final VarBinding binding_2 : _variables_2) {
         _builder.append("\t\t\t");
-        String _name_3 = binding_1.getName();
+        String _get = MathGenerator.letVariables.get(binding_2.getName());
+        _builder.append(_get, "\t\t\t");
+        _builder.newLineIfNotEmpty();
+        _builder.append("\t\t\t");
+        String _name_3 = binding_2.getName();
         _builder.append(_name_3, "\t\t\t");
         _builder.append(" = ");
-        String _compileExp = MathGenerator.compileExp(binding_1.getExpression());
-        _builder.append(_compileExp, "\t\t\t");
+        String _get_1 = MathGenerator.variables.get(binding_2.getName());
+        _builder.append(_get_1, "\t\t\t");
         _builder.append(";");
         _builder.newLineIfNotEmpty();
       }
@@ -265,8 +275,8 @@ public class MathGenerator extends AbstractGenerator {
       if (exp instanceof LetBinding) {
         _matched=true;
         StringConcatenation _builder = new StringConcatenation();
-        String _compileLetBinding = MathGenerator.compileLetBinding(((LetBinding)exp));
-        _builder.append(_compileLetBinding);
+        String _compileLet = MathGenerator.compileLet(((LetBinding)exp));
+        _builder.append(_compileLet);
         _switchResult = _builder.toString();
       }
     }
@@ -278,8 +288,73 @@ public class MathGenerator extends AbstractGenerator {
     return _switchResult;
   }
   
-  public static String compileLetBinding(final LetBinding exp) {
+  public static String compileLet(final LetBinding let) {
+    String bindingName = MathGenerator.findBindingName(let);
+    String letName = let.getName();
+    String _compileExp = MathGenerator.compileExp(let.getBinding());
+    String _plus = ((("int " + letName) + " = ") + _compileExp);
+    String newVariable = (_plus + "; ");
+    String body = MathGenerator.compileExp(let.getBody()).toString();
+    boolean _containsKey = MathGenerator.letVariables.containsKey(bindingName);
+    if (_containsKey) {
+      String variable = MathGenerator.letVariables.get(bindingName);
+      boolean _contains = MathGenerator.varLetters.contains(let.getName().toString());
+      if (_contains) {
+        variable = variable.replace("int ", "");
+      }
+      MathGenerator.letVariables.put(bindingName, (((newVariable + " ") + variable) + " "));
+    }
+    boolean _containsKey_1 = MathGenerator.letVariables.containsKey(bindingName);
+    boolean _not = (!_containsKey_1);
+    if (_not) {
+      boolean _containsKey_2 = MathGenerator.variables.containsKey(letName);
+      if (_containsKey_2) {
+        letName = MathGenerator.findNewName();
+        String _compileExp_1 = MathGenerator.compileExp(let.getBinding());
+        String _plus_1 = ((("int " + letName) + " = ") + _compileExp_1);
+        String _plus_2 = (_plus_1 + "; ");
+        newVariable = _plus_2;
+        body = body.replace(let.getName(), letName);
+      } else {
+        boolean _contains_1 = MathGenerator.varLetters.contains(letName);
+        if (_contains_1) {
+          newVariable = newVariable.replace("int ", "");
+        }
+      }
+      MathGenerator.letVariables.put(bindingName, newVariable);
+      MathGenerator.varLetters.add(letName);
+    }
+    return body;
+  }
+  
+  public static String findNewName() {
+    char[] alpha = MathGenerator.alphabet.toCharArray();
+    String let = "a";
+    for (final char letter : alpha) {
+      {
+        boolean _containsKey = MathGenerator.variables.containsKey(Character.valueOf(letter).toString());
+        boolean _not = (!_containsKey);
+        if (_not) {
+          return let;
+        }
+        let = Character.valueOf(letter).toString();
+      }
+    }
     return null;
+  }
+  
+  public static String findBindingName(final Binding binding) {
+    String name = binding.getName();
+    EObject CurrentContainer = binding.eContainer();
+    while ((CurrentContainer != null)) {
+      {
+        if ((CurrentContainer instanceof VarBinding)) {
+          name = ((VarBinding)CurrentContainer).getName();
+        }
+        CurrentContainer = CurrentContainer.eContainer();
+      }
+    }
+    return name;
   }
   
   public static List<String> complieExpList(final List<Expression> expList) {
@@ -312,5 +387,21 @@ public class MathGenerator extends AbstractGenerator {
       MathGenerator.letterIndex = 0;
     }
     return parms;
+  }
+  
+  public void displayPanel(final Map<String, Integer> result) {
+    String resultString = "";
+    Set<Map.Entry<String, Integer>> _entrySet = result.entrySet();
+    for (final Map.Entry<String, Integer> entry : _entrySet) {
+      String _resultString = resultString;
+      String _key = entry.getKey();
+      String _plus = ("var " + _key);
+      String _plus_1 = (_plus + " = ");
+      Integer _value = entry.getValue();
+      String _plus_2 = (_plus_1 + _value);
+      String _plus_3 = (_plus_2 + "\n");
+      resultString = (_resultString + _plus_3);
+    }
+    JOptionPane.showMessageDialog(null, resultString, "Math Language", JOptionPane.INFORMATION_MESSAGE);
   }
 }

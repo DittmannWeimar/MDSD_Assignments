@@ -17,10 +17,12 @@ package math_expression;
 		public void compute(){
 			sideA = 3;
 			sideB = 4;
-			sideC = ;
+			int powA = this.external.pow(sideA, 2);  int powB = this.external.pow(sideB, 2);  
+			sideC = this.external.sqrt(powA + powB);
 			perimeterTriangle = sideA + sideB + sideC;
 			radius = 5;
-			perimeterCircle = ;
+			int diameter = 2 * radius; 
+			perimeterCircle = diameter * this.external.pi();
 		}
 
 		public interface External {
